@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">GithubApp</string>
+    <string name="search">Search</string>
+    <string name="followers_users">%d Followers</string>
+    <string name="following_users">%d Following</string>
+    <string name="twitter">@%s</string>
+    <string name="profile">Profile</string>
+    <string name="twitter_url">https://twitter.com/%s</string>
+    <string name="no_application_available">No application available to open %s</string>
+    <string name="follower">Followers</string>
+    <string name="following">Following</string>
+    <string name="repository">Repository</string>
+    <string name="repository_number">%d Repository</string>
+    <string name="follow">Follow</string>
+    <string name="forks_number">%d Forks</string>
+    <string name="watching_number">%d Watching</string>
+    <string name="issues_number">%d Issues</string>
+    <string name="repository_archived">Repository Archived</string>
+</resources>

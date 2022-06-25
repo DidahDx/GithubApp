@@ -1,0 +1,98 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+
+android {
+    compileSdk 32
+    def localProperties = new Properties()
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+    defaultConfig {
+        applicationId "com.github.didahdx.githubapp"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "GITHUB_TOKEN", localProperties['GITHUB_TOKEN'])
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+
+    implementation androidx.core_ktx
+    implementation androidx.appcompat
+    implementation materialAndroid.material
+    implementation androidx.constraintlayout
+    implementation legacySupport.legacy_support_v4
+
+    implementation lifecycle.livedata_ktx
+    implementation lifecycle.viewmodel_ktx
+
+
+    // Kotlin
+    implementation navigationLib.navigation_fragment_ktx
+    implementation navigationLib.navigation_ui_ktx
+
+    //retrofit
+    implementation retrofit.retrofit
+    implementation retrofit.moshi_kotlin
+    implementation retrofit.converter_moshi
+    implementation(platform(okhttp3.okhttp_bom))
+    // define any required OkHttp artifacts without version
+    implementation okhttp3.okhttp
+    implementation okhttp3.logging_interceptor
+
+    //logging
+    implementation loggingLib.timber
+    implementation loggingLib.orhanobut_logger
+
+    //dagger hilt
+    implementation daggerHiltLib.hilt_android
+    kapt daggerHiltLib.hilt_compiler
+
+    implementation airbnbLottie.lottie
+
+    //glide
+    implementation bumptech.glide
+    annotationProcessor bumptech.glide_complie
+
+    // Coroutines
+    implementation coroutines.coroutines_core
+    implementation coroutines.coroutines_android
+
+    implementation circleImageView.hdodenhof
+
+    debugImplementation leakcanary.leakcanary_android
+
+    //unit test
+    testImplementation test.junit
+
+    //ui test
+    androidTestImplementation uiTest.ext_junit
+    androidTestImplementation uiTest.espresso_core
+    // Testing Navigation
+    androidTestImplementation uiTest.navigation_testing
+}

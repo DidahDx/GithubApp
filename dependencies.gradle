@@ -1,0 +1,116 @@
+ext {
+    nav_version = "2.4.2"
+    pagingVersion = "3.1.0"
+    lottieVersion = "5.2.0"
+    retrofitVersion = "2.9.0"
+    moshiKotlinVersion = "1.11.0"
+    okhttpBomVersion = "4.9.0"
+
+    //logging
+    timberVersion = "5.0.1"
+    orhanobutLoggerVersion = "2.2.0"
+
+    //di
+    daggerHiltVersion = "2.38.1"
+
+    coroutinesCoreVersion = "1.5.2"
+    coroutinesAndroidVersion = "1.5.2"
+
+    materialAndroidVersion = "1.6.1"
+
+    //androidx
+    coreKtxVersion = "1.8.0"
+    appcompatVersion = "1.4.2"
+    constraintlayoutVersion = "2.1.4"
+    lifecycleVersion = "2.4.1"
+    legacySupportV4Version = "1.0.0"
+    circleImageViewVersion = "3.1.0"
+    glideVersion="4.13.0"
+    leakcanaryAndroidVersion = "2.9.1"
+
+    //testing
+    extJunitVersion = "1.1.3"
+    espressoCoreVersion = "3.4.0"
+    junitVersion = "4.13.2"
+
+    bumptech = [
+           glide: "com.github.bumptech.glide:glide:$glideVersion",
+           glide_complie: "com.github.bumptech.glide:compiler:$glideVersion"
+    ]
+
+    circleImageView = [
+            hdodenhof:   "de.hdodenhof:circleimageview:$circleImageViewVersion"
+    ]
+
+    retrofit = [
+            retrofit       : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+            moshi_kotlin   : "com.squareup.moshi:moshi-kotlin:$moshiKotlinVersion",
+            converter_moshi: "com.squareup.retrofit2:converter-moshi:$retrofitVersion",
+    ]
+
+    okhttp3 = [
+            okhttp_bom         : "com.squareup.okhttp3:okhttp-bom:$okhttpBomVersion",
+            okhttp             : "com.squareup.okhttp3:okhttp",
+            logging_interceptor: "com.squareup.okhttp3:logging-interceptor"
+    ]
+
+    loggingLib = [
+            timber          : "com.jakewharton.timber:timber:$timberVersion",
+            orhanobut_logger: "com.orhanobut:logger:$orhanobutLoggerVersion"
+    ]
+
+    daggerHiltLib = [
+            hilt_android : "com.google.dagger:hilt-android:$daggerHiltVersion",
+            hilt_compiler: "com.google.dagger:hilt-compiler:$daggerHiltVersion"
+    ]
+
+    navigationLib = [
+            navigation_fragment_ktx: "androidx.navigation:navigation-fragment-ktx:$nav_version",
+            navigation_ui_ktx      : "androidx.navigation:navigation-ui-ktx:$nav_version"
+    ]
+
+    coroutines = [
+            // Coroutines
+            coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCoreVersion",
+            coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroidVersion"
+    ]
+
+    materialAndroid = [
+            material: "com.google.android.material:material:$materialAndroidVersion"
+    ]
+
+    legacySupport = [
+            legacy_support_v4: "androidx.legacy:legacy-support-v4:$legacySupportV4Version"
+    ]
+
+    androidx = [
+            core_ktx        : "androidx.core:core-ktx:$coreKtxVersion",
+            appcompat       : "androidx.appcompat:appcompat:$appcompatVersion",
+            constraintlayout: "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion",
+    ]
+
+    lifecycle = [
+            livedata_ktx : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
+            viewmodel_ktx: "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    ]
+
+    leakcanary = [
+            leakcanary_android: "com.squareup.leakcanary:leakcanary-android:$leakcanaryAndroidVersion"
+    ]
+
+    airbnbLottie = [
+            lottie: "com.airbnb.android:lottie:$lottieVersion"
+    ]
+
+
+    //testing
+    test = [
+            junit: "junit:junit:$junitVersion"
+    ]
+
+    uiTest = [
+            navigation_testing: "androidx.navigation:navigation-testing:$nav_version",
+            ext_junit         : "androidx.test.ext:junit:$extJunitVersion",
+            espresso_core     : "androidx.test.espresso:espresso-core:$espressoCoreVersion"
+    ]
+}
