@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.didahdx.githubapp.R
@@ -18,29 +18,21 @@ import com.github.didahdx.githubapp.ui.searchUsers.OnItemClickListener
 import com.github.didahdx.githubapp.ui.searchUsers.UsersAdapter
 import com.github.didahdx.githubapp.ui.userDetails.UserDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FollowFragment : Fragment() {
+class FollowFragment : Fragment(R.layout.fragment_follow) {
     companion object {
         const val IS_FOLLOWING = "is_following"
     }
 
     private val viewModel: FollowViewModel by viewModels()
 
-    private var _binding : FragmentFollowBinding?= null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding =FragmentFollowBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userAdapter = UsersAdapter(object : OnItemClickListener{
+        val binding = FragmentFollowBinding.bind(view)
+        val userAdapter = UsersAdapter(object : OnItemClickListener {
             override fun userClicked(user: User) {
                 val bundle = bundleOf(UserDetailsViewModel.LOGIN to user.login)
                 findNavController().navigateSafe(
@@ -57,21 +49,18 @@ class FollowFragment : Fragment() {
             layoutManager = manager
         }
 
-        viewModel.isFollowing.observe(viewLifecycleOwner){
-            if(it){
-
-            }else{
-
+        viewModel.isFollowing.observe(viewLifecycleOwner) {
+            if (it) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.followingList.collectLatest(userAdapter::submitData)
+                }
+            } else {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.followerList.collectLatest(userAdapter::submitData)
+                }
             }
         }
-        viewModel.user.observe(viewLifecycleOwner) {
-            userAdapter.submitList(it)
-        }
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

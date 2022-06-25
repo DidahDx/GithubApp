@@ -25,23 +25,13 @@ import timber.log.Timber
 
 
 @AndroidEntryPoint
-class UserDetailsFragment : Fragment() {
+class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
 
     private val viewModel: UserDetailsViewModel by viewModels()
-    private var _binding: FragmentUserDetailsBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentUserDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentUserDetailsBinding.bind(view)
         viewModel.userDetail.observe(viewLifecycleOwner) { userDetail ->
             if (userDetail != null) {
 
@@ -58,7 +48,8 @@ class UserDetailsFragment : Fragment() {
 
                 binding.tvTwitter.displayDataIfNotNull(
                     userDetail.twitterUsername,
-                    getString(R.string.twitter, userDetail.twitterUsername)) {
+                    getString(R.string.twitter, userDetail.twitterUsername)
+                ) {
                     val twitterUrl = getString(R.string.twitter_url, userDetail.twitterUsername)
                     try {
                         val url = getString(R.string.twitter_url, userDetail.twitterUsername)
@@ -145,11 +136,6 @@ class UserDetailsFragment : Fragment() {
 
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

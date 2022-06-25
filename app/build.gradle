@@ -84,11 +84,13 @@ dependencies {
     implementation coroutines.coroutines_android
 
     implementation circleImageView.hdodenhof
+    implementation paging3.paging_runtime
 
     debugImplementation leakcanary.leakcanary_android
 
     //unit test
     testImplementation test.junit
+    testImplementation test.paging3_common
 
     //ui test
     androidTestImplementation uiTest.ext_junit

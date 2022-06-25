@@ -20,10 +20,10 @@ fun View.hide(): View {
     return this
 }
 
-fun View.setVisibility(isVisible: Boolean?):View{
-    if(isVisible!= null){
-        if(isVisible) show() else hide()
-    }else{
+fun View.setVisibility(isVisible: Boolean?): View {
+    if (isVisible != null) {
+        if (isVisible) show() else hide()
+    } else {
         hide()
     }
     return this

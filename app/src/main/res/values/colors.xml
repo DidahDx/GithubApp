@@ -11,4 +11,5 @@
     <color name="cultured">#F7F7F8</color>
     <color name="brown_light">#BC8D55</color>
     <color name="brown_dark">#8C5812</color>
+    <color name="rippleOnAccent">#3D5F5B5B</color>
 </resources>

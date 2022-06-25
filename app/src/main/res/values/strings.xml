@@ -16,4 +16,5 @@
     <string name="watching_number">%d Watching</string>
     <string name="issues_number">%d Issues</string>
     <string name="repository_archived">Repository Archived</string>
+    <string name="repository_forked">Repository Forked</string>
 </resources>

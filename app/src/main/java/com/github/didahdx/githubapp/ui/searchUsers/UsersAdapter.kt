@@ -2,8 +2,8 @@ package com.github.didahdx.githubapp.ui.searchUsers
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.github.didahdx.githubapp.data.remote.dto.User
@@ -11,15 +11,15 @@ import com.github.didahdx.githubapp.databinding.ItemUserBinding
 
 class UsersAdapter constructor(
     private val onItemClickListener: OnItemClickListener
-) : ListAdapter<User, UsersAdapter.UsersViewHolder>(UsersDiffUtil()) {
+) : PagingDataAdapter<User, UsersAdapter.UsersViewHolder>(UsersDiffUtil()) {
 
     inner class UsersViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
-                val position = adapterPosition
+                val position = absoluteAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    onItemClickListener.userClicked(getItem(position))
+                    getItem(position)?.let { user -> onItemClickListener.userClicked(user) }
                 }
             }
         }
@@ -41,7 +41,7 @@ class UsersAdapter constructor(
     }
 
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let {user -> holder.bind(user) }
     }
 }
 

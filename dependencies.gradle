@@ -1,6 +1,6 @@
 ext {
     nav_version = "2.4.2"
-    pagingVersion = "3.1.0"
+    pagingVersion = "3.1.1"
     lottieVersion = "5.2.0"
     retrofitVersion = "2.9.0"
     moshiKotlinVersion = "1.11.0"
@@ -25,7 +25,7 @@ ext {
     lifecycleVersion = "2.4.1"
     legacySupportV4Version = "1.0.0"
     circleImageViewVersion = "3.1.0"
-    glideVersion="4.13.0"
+    glideVersion = "4.13.0"
     leakcanaryAndroidVersion = "2.9.1"
 
     //testing
@@ -33,13 +33,17 @@ ext {
     espressoCoreVersion = "3.4.0"
     junitVersion = "4.13.2"
 
+    paging3 = [
+            paging_runtime: "androidx.paging:paging-runtime:$pagingVersion"
+    ]
+
     bumptech = [
-           glide: "com.github.bumptech.glide:glide:$glideVersion",
-           glide_complie: "com.github.bumptech.glide:compiler:$glideVersion"
+            glide        : "com.github.bumptech.glide:glide:$glideVersion",
+            glide_complie: "com.github.bumptech.glide:compiler:$glideVersion"
     ]
 
     circleImageView = [
-            hdodenhof:   "de.hdodenhof:circleimageview:$circleImageViewVersion"
+            hdodenhof: "de.hdodenhof:circleimageview:$circleImageViewVersion"
     ]
 
     retrofit = [
@@ -105,7 +109,8 @@ ext {
 
     //testing
     test = [
-            junit: "junit:junit:$junitVersion"
+            junit: "junit:junit:$junitVersion",
+            paging3_common : "androidx.paging:paging-common:$pagingVersion"
     ]
 
     uiTest = [

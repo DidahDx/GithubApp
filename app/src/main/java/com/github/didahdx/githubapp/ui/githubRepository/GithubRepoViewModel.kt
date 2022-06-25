@@ -1,13 +1,13 @@
 package com.github.didahdx.githubapp.ui.githubRepository
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.paging.cachedIn
 import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
 import com.github.didahdx.githubapp.data.repository.UsersRepository
 import com.github.didahdx.githubapp.ui.userDetails.UserDetailsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,16 +18,9 @@ class GithubRepoViewModel @Inject constructor(
 ) : ViewModel() {
     private val login = savedStateHandle.getLiveData(UserDetailsViewModel.LOGIN, "")
 
-    val githubRepository = MutableLiveData<List<RepositoryDto>>()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val githubRepository = login.asFlow().flatMapLatest { userId ->
+        usersRepository.getUsersRepositoryList(userId)
+    }.cachedIn(viewModelScope)
 
-    init {
-        getRepositories()
-    }
-
-    fun getRepositories() {
-        viewModelScope.launch {
-            val repos = usersRepository.getUsersRepositoryList(login.value!!)
-            githubRepository.postValue(repos)
-        }
-    }
 }

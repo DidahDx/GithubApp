@@ -6,6 +6,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.didahdx.githubapp.R
@@ -14,30 +15,23 @@ import com.github.didahdx.githubapp.data.remote.dto.User
 import com.github.didahdx.githubapp.databinding.FragmentSearchBinding
 import com.github.didahdx.githubapp.ui.userDetails.UserDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private val viewModel: SearchViewModel by viewModels()
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentSearchBinding.bind(view)
         val searchAdapter = UsersAdapter(object : OnItemClickListener {
             override fun userClicked(user: User) {
                 val bundle = bundleOf(UserDetailsViewModel.LOGIN to user.login)
@@ -55,10 +49,10 @@ class SearchFragment : Fragment() {
             adapter = searchAdapter
             layoutManager = manager
         }
-
-        viewModel.users.observe(viewLifecycleOwner) {
-            searchAdapter.submitList(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.users.collectLatest(searchAdapter::submitData)
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -82,9 +76,4 @@ class SearchFragment : Fragment() {
         })
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

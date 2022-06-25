@@ -1,41 +1,67 @@
 package com.github.didahdx.githubapp.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.github.didahdx.githubapp.common.Constants
+import com.github.didahdx.githubapp.data.pagingSource.FollowersPagingSource
+import com.github.didahdx.githubapp.data.pagingSource.FollowingPagingSource
+import com.github.didahdx.githubapp.data.pagingSource.RepositoryPagingSource
+import com.github.didahdx.githubapp.data.pagingSource.SearchPagingSource
 import com.github.didahdx.githubapp.data.remote.api.GitHubApiService
 import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
 import com.github.didahdx.githubapp.data.remote.dto.User
 import com.github.didahdx.githubapp.data.remote.dto.UserDetails
-import kotlinx.coroutines.flow.flow
-import timber.log.Timber
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GithubUsersRepository @Inject constructor(
     private val gitHubApiService: GitHubApiService
 ) : UsersRepository {
-    override fun searchUser(user: String, page: Int, pageSize: Int) = flow {
-        try {
-            emit(gitHubApiService.searchUsers(user, page, pageSize).items)
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
+
+    override fun searchUser(user: String): Flow<PagingData<User>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = Constants.PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { SearchPagingSource(gitHubApiService, user) }
+        ).flow
     }
 
-    override suspend fun getUserDetails(userName: String, page: Int, pageSize: Int): UserDetails {
-        return gitHubApiService.getUserDetails(userName, page, pageSize)
+    override suspend fun getUserDetails(userName: String): UserDetails {
+        return gitHubApiService.getUserDetails(userName)
     }
 
-    override suspend fun getFollowerList(userName: String, page: Int, pageSize: Int): List<User> {
-        return gitHubApiService.getFollowerList(userName, page, pageSize)
+    override fun getFollowerList(userName: String): Flow<PagingData<User>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = Constants.PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { FollowersPagingSource(gitHubApiService, userName) }
+        ).flow
     }
 
-    override suspend fun getFollowingList(userName: String, page: Int, pageSize: Int): List<User> {
-        return gitHubApiService.getFollowingList(userName, page, pageSize)
+    override fun getFollowingList(userName: String): Flow<PagingData<User>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = Constants.PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { FollowingPagingSource(gitHubApiService, userName) }
+        ).flow
     }
 
-    override suspend fun getUsersRepositoryList(
-        userName: String,
-        page: Int,
-        pageSize: Int
-    ): List<RepositoryDto> {
-        return gitHubApiService.getUsersRepositoryList(userName, page, pageSize)
+    override fun getUsersRepositoryList(
+        userName: String
+    ): Flow<PagingData<RepositoryDto>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = Constants.PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { RepositoryPagingSource(gitHubApiService, userName) }
+        ).flow
     }
 }

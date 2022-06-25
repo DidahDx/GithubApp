@@ -1,5 +1,6 @@
 package com.github.didahdx.githubapp.data.repository
 
+import androidx.paging.PagingData
 import com.github.didahdx.githubapp.common.Constants
 import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
 import com.github.didahdx.githubapp.data.remote.dto.User
@@ -9,36 +10,26 @@ import kotlinx.coroutines.flow.Flow
 interface UsersRepository {
 
     fun searchUser(
-        user: String,
-        page: Int = 1,
-        pageSize: Int = Constants.PAGE_SIZE
-    ): Flow<List<User>>
+        user: String
+    ): Flow<PagingData<User>>
 
 
     suspend fun getUserDetails(
-        userName: String,
-        page: Int = 1,
-        pageSize: Int = Constants.PAGE_SIZE
+        userName: String
     ): UserDetails
 
 
-    suspend fun getFollowerList(
-        userName: String,
-        page: Int = 1,
-        pageSize: Int = Constants.PAGE_SIZE
-    ): List<User>
+    fun getFollowerList(
+        userName: String
+    ): Flow<PagingData<User>>
 
 
-    suspend fun getFollowingList(
-        userName: String,
-        page: Int = 1,
-        pageSize: Int = Constants.PAGE_SIZE
-    ): List<User>
+    fun getFollowingList(
+        userName: String
+    ): Flow<PagingData<User>>
 
 
-    suspend fun getUsersRepositoryList(
-        userName: String,
-        page: Int = 1,
-        pageSize: Int = Constants.PAGE_SIZE
-    ): List<RepositoryDto>
+    fun getUsersRepositoryList(
+        userName: String
+    ): Flow<PagingData<RepositoryDto>>
 }

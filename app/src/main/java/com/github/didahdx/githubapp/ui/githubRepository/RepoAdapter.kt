@@ -2,6 +2,7 @@ package com.github.didahdx.githubapp.ui.githubRepository
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,21 +12,33 @@ import com.github.didahdx.githubapp.common.extension.hide
 import com.github.didahdx.githubapp.common.extension.setVisibility
 import com.github.didahdx.githubapp.common.extension.show
 import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
+import com.github.didahdx.githubapp.data.remote.dto.User
 import com.github.didahdx.githubapp.databinding.ItemGithubRepositoryBinding
 import com.google.android.material.chip.Chip
 
-class RepoAdapter : ListAdapter<RepositoryDto, RepoAdapter.RepoViewHolder>(RepoDiffUtil()) {
+class RepoAdapter(
+    private val onItemClickListener: OnItemClickListener
+) : PagingDataAdapter<RepositoryDto, RepoAdapter.RepoViewHolder>(RepoDiffUtil()) {
 
     inner class RepoViewHolder(private val binding: ItemGithubRepositoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            binding.root.setOnClickListener {
+                val position = absoluteAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    getItem(position)?.let { repositoryDto -> onItemClickListener.onClick(repositoryDto) }
+                }
+            }
+        }
         fun bind(repositoryDto: RepositoryDto) {
             binding.tvArchived.setVisibility(repositoryDto.archived)
             binding.tvName.displayDataIfNotNull(repositoryDto.name, null)
-            binding.tvDefaultBranch.displayDataIfNotNull(repositoryDto.defaultBranch,null)
+            binding.tvDefaultBranch.displayDataIfNotNull(repositoryDto.defaultBranch, null)
             binding.tvDescription.displayDataIfNotNull(repositoryDto.description, null)
-            binding.tvLicense.displayDataIfNotNull(repositoryDto.license?.name,null)
+            binding.tvLicense.displayDataIfNotNull(repositoryDto.license?.name, null)
             binding.tvLicense.isSelected = true
+            binding.tvForked.setVisibility(repositoryDto.fork)
             binding.tvWatchers.displayDataIfNotNull(
                 repositoryDto.watchersCount.toString(),
                 binding.root.context.getString(
@@ -76,8 +89,12 @@ class RepoAdapter : ListAdapter<RepositoryDto, RepoAdapter.RepoViewHolder>(RepoD
     }
 
     override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
     }
+}
+
+interface OnItemClickListener {
+    fun onClick(repositoryDto: RepositoryDto)
 }
 
 class RepoDiffUtil : DiffUtil.ItemCallback<RepositoryDto>() {

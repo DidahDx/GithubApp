@@ -13,9 +13,10 @@ import retrofit2.http.Query
 interface GitHubApiService {
     companion object {
         const val TOKEN: String = BuildConfig.GITHUB_TOKEN
+        const val ACCEPT_HEADER = "application/vnd.github.v3+json"
     }
 
-    @Headers("Accept: application/vnd.github.v3+json", "Authorization: token $TOKEN")
+    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $TOKEN")
     @GET("search/users")
     suspend fun searchUsers(
         @Query("q") user: String,
@@ -23,27 +24,29 @@ interface GitHubApiService {
         @Query("per_page") pageSize: Int
     ): SearchUsers
 
+    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $TOKEN")
     @GET("users/{username}")
     suspend fun getUserDetails(
-        @Path("username") userName: String,
-        @Query("page") page: Int,
-        @Query("per_page") pageSize: Int
+        @Path("username") userName: String
     ): UserDetails
 
+    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $TOKEN")
     @GET("users/{username}/followers")
-    suspend fun getFollowerList(
+    suspend fun getFollowerUsersList(
         @Path("username") userName: String,
         @Query("page") page: Int,
         @Query("per_page") pageSize: Int
     ): List<User>
 
+    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $TOKEN")
     @GET("users/{username}/following")
-    suspend fun getFollowingList(
+    suspend fun getFollowingUsersList(
         @Path("username") userName: String,
         @Query("page") page: Int,
         @Query("per_page") pageSize: Int
     ): List<User>
 
+    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $TOKEN")
     @GET("users/{username}/repos")
     suspend fun getUsersRepositoryList(
         @Path("username") userName: String,
