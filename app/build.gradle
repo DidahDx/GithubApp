@@ -9,7 +9,9 @@ plugins {
 android {
     compileSdk 32
     def localProperties = new Properties()
-    localProperties.load(new FileInputStream(rootProject.file("secrets.properties")))
+
+    localProperties.load(project.rootProject.file('secrets.properties').newDataInputStream())
+//    localProperties.load(new FileInputStream(rootProject.file("secrets.properties")))
     defaultConfig {
         applicationId "com.github.didahdx.githubapp"
         minSdk 21
