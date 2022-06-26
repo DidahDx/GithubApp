@@ -195,7 +195,6 @@
         android:visibility="gone"
         tools:visibility="visible"
         android:text="@string/repository"
-        app:drawableStartCompat="@drawable/ic_repository"
-        />
+        app:drawableStartCompat="@drawable/ic_repository" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

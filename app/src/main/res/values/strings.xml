@@ -17,4 +17,7 @@
     <string name="issues_number">%d Issues</string>
     <string name="repository_archived">Repository Archived</string>
     <string name="repository_forked">Repository Forked</string>
+    <string name="no_results">No results</string>
+    <string name="retry">Retry</string>
+    <string name="error_message">😨 Wooops %s</string>
 </resources>

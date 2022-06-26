@@ -29,10 +29,19 @@ ext {
     glideVersion = "4.13.0"
     leakcanaryAndroidVersion = "2.9.1"
 
+    roomVersion = "2.4.2"
+
     //testing
     extJunitVersion = "1.1.3"
     espressoCoreVersion = "3.4.0"
     junitVersion = "4.13.2"
+
+    room = [
+            room_runtime : "androidx.room:room-runtime:$roomVersion",
+            room_compiler: "androidx.room:room-compiler:$roomVersion",
+            // optional - Kotlin Extensions and Coroutines support for Room
+            room_ktx     : "androidx.room:room-ktx:$roomVersion"
+    ]
 
     paging3 = [
             paging_runtime: "androidx.paging:paging-runtime:$pagingVersion"
@@ -65,10 +74,10 @@ ext {
     ]
 
     daggerHiltLib = [
-            hilt_android : "com.google.dagger:hilt-android:$daggerHiltVersion",
-            hilt_compiler: "com.google.dagger:hilt-compiler:$daggerHiltVersion",
+            hilt_android            : "com.google.dagger:hilt-android:$daggerHiltVersion",
+            hilt_compiler           : "com.google.dagger:hilt-compiler:$daggerHiltVersion",
             hilt_lifecycle_viewmodel: "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelVersion",
-            androidx_hilt_compiler: "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
+            androidx_hilt_compiler  : "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
     ]
 
     navigationLib = [
@@ -97,8 +106,8 @@ ext {
     ]
 
     lifecycle = [
-            livedata_ktx : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
-            viewmodel_ktx: "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
+            livedata_ktx        : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
+            viewmodel_ktx       : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
             viewmodel_savedstate: "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion"
 
     ]
@@ -114,8 +123,10 @@ ext {
 
     //testing
     test = [
-            junit: "junit:junit:$junitVersion",
-            paging3_common : "androidx.paging:paging-common:$pagingVersion"
+            junit         : "junit:junit:$junitVersion",
+            paging3_common: "androidx.paging:paging-common:$pagingVersion",
+            room_testing  : "androidx.room:room-testing:$roomVersion"
+
     ]
 
     uiTest = [
