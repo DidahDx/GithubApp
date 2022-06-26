@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Decode GITHUB TOKEN
           command: |
-            echo $GITHUB_TOKEN | base64 -d > /home/circleci/project/secrets.properties
+            echo $GITHUB_TOKEN | base64 -d > local.properties
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:

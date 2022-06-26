@@ -8,10 +8,10 @@ plugins {
 
 android {
     compileSdk 32
-    def localProperties = new Properties()
 
-    localProperties.load(project.rootProject.file('secrets.properties').newDataInputStream())
-//    localProperties.load(new FileInputStream(rootProject.file("secrets.properties")))
+    def localProperties = new Properties()
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
     defaultConfig {
         applicationId "com.github.didahdx.githubapp"
         minSdk 21
@@ -84,7 +84,7 @@ dependencies {
 
     //glide
     implementation bumptech.glide
-    annotationProcessor bumptech.glide_complie
+    kapt bumptech.glide_complie
 
     // Coroutines
     implementation coroutines.coroutines_core
