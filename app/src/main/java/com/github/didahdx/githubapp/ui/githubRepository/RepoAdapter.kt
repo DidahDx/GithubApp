@@ -39,14 +39,7 @@ class RepoAdapter(
             binding.tvLicense.displayDataIfNotNull(repositoryDto.license?.name, null)
             binding.tvLicense.isSelected = true
             binding.tvForked.setVisibility(repositoryDto.fork)
-            binding.tvWatchers.displayDataIfNotNull(
-                repositoryDto.watchersCount.toString(),
-                binding.root.context.getString(
-                    R.string.watching_number,
-                    repositoryDto.watchersCount
-                ),
-                null
-            )
+
             binding.tvLanguage.displayDataIfNotNull(repositoryDto.language, null)
             binding.tvStars.displayDataIfNotNull(repositoryDto.stargazersCount.toString(), null)
             binding.tvIssues.displayDataIfNotNull(

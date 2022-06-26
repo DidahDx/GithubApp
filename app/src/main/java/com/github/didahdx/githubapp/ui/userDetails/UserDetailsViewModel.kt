@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.github.didahdx.githubapp.data.remote.dto.UserDetails
 import com.github.didahdx.githubapp.data.repository.UsersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +23,6 @@ class UserDetailsViewModel @Inject constructor(
     }
 
     val userDetail = MutableLiveData<UserDetails>()
-
     private val login = savedStateHandle.getLiveData(LOGIN, "")
 
     init {
@@ -29,9 +30,13 @@ class UserDetailsViewModel @Inject constructor(
     }
 
     fun getUserDetails() {
-        viewModelScope.launch {
-            val detail = usersRepository.getUserDetails(login.value!!)
-            userDetail.postValue(detail)
+        try {
+            usersRepository.getUserDetails(login.value!!).onEach {
+                userDetail.postValue(it)
+            }.launchIn(viewModelScope)
+        } catch (e: Exception) {
+            Timber.e(e)
         }
+
     }
 }

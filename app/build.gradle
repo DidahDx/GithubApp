@@ -37,6 +37,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
 }
 
@@ -48,8 +49,10 @@ dependencies {
     implementation androidx.constraintlayout
     implementation legacySupport.legacy_support_v4
 
+    //lifecycle
     implementation lifecycle.livedata_ktx
     implementation lifecycle.viewmodel_ktx
+    implementation lifecycle.viewmodel_savedstate
 
 
     // Kotlin
@@ -72,6 +75,8 @@ dependencies {
     //dagger hilt
     implementation daggerHiltLib.hilt_android
     kapt daggerHiltLib.hilt_compiler
+    implementation daggerHiltLib.hilt_lifecycle_viewmodel
+    kapt daggerHiltLib.androidx_hilt_compiler
 
     implementation airbnbLottie.lottie
 

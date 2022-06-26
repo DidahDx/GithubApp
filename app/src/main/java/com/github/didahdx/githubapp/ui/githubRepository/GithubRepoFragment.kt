@@ -55,6 +55,7 @@ class GithubRepoFragment : Fragment(R.layout.fragment_github_repo) {
             layoutManager = manager
             addItemDecoration(itemDecoration)
         }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.githubRepository.collectLatest(repoAdapter::submitData)
         }

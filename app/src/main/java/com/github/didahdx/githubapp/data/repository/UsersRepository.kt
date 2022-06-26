@@ -14,9 +14,9 @@ interface UsersRepository {
     ): Flow<PagingData<User>>
 
 
-    suspend fun getUserDetails(
+     fun getUserDetails(
         userName: String
-    ): UserDetails
+    ): Flow<UserDetails>
 
 
     fun getFollowerList(

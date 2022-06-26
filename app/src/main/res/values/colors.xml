@@ -7,9 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-<color name="github_blue">#1f6feb</color>
+    <color name="github_blue">#1f6feb</color>
+    <color name="github_blue_light">#ddf4ff</color>
     <color name="cultured">#F7F7F8</color>
     <color name="brown_light">#BC8D55</color>
     <color name="brown_dark">#8C5812</color>
     <color name="rippleOnAccent">#3D5F5B5B</color>
+    <color name="github_archive_1">#FBE68C</color>
+    <color name="github_archive">#FFF7BE</color>
+    <color name="github_archive_text">#836f27</color>
 </resources>

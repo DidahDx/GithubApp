@@ -10,8 +10,9 @@ ext {
     timberVersion = "5.0.1"
     orhanobutLoggerVersion = "2.2.0"
 
-    //di
+    //hilt di
     daggerHiltVersion = "2.38.1"
+    hiltViewModelVersion = "1.0.0-alpha03"
 
     coroutinesCoreVersion = "1.5.2"
     coroutinesAndroidVersion = "1.5.2"
@@ -65,7 +66,9 @@ ext {
 
     daggerHiltLib = [
             hilt_android : "com.google.dagger:hilt-android:$daggerHiltVersion",
-            hilt_compiler: "com.google.dagger:hilt-compiler:$daggerHiltVersion"
+            hilt_compiler: "com.google.dagger:hilt-compiler:$daggerHiltVersion",
+            hilt_lifecycle_viewmodel: "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelVersion",
+            androidx_hilt_compiler: "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
     ]
 
     navigationLib = [
@@ -95,7 +98,9 @@ ext {
 
     lifecycle = [
             livedata_ktx : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
-            viewmodel_ktx: "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+            viewmodel_ktx: "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
+            viewmodel_savedstate: "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion"
+
     ]
 
     leakcanary = [

@@ -1,9 +1,6 @@
 package com.github.didahdx.githubapp.ui.searchUsers
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import com.github.didahdx.githubapp.data.repository.UsersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +18,8 @@ class SearchViewModel @Inject constructor(
         const val SEARCH_QUERY = "SEARCH_QUERY"
     }
 
-    private val searchUserQuery = savedStateHandle.getLiveData(SEARCH_QUERY, "")
+    private val searchUserQuery: MutableLiveData<String> =
+        savedStateHandle.getLiveData(SEARCH_QUERY)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val users = searchUserQuery.asFlow()

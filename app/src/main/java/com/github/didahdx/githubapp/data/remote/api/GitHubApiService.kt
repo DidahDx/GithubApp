@@ -1,6 +1,7 @@
 package com.github.didahdx.githubapp.data.remote.api
 
 import com.github.didahdx.githubapp.BuildConfig
+import com.github.didahdx.githubapp.common.Constants
 import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
 import com.github.didahdx.githubapp.data.remote.dto.SearchUsers
 import com.github.didahdx.githubapp.data.remote.dto.User
@@ -51,6 +52,8 @@ interface GitHubApiService {
     suspend fun getUsersRepositoryList(
         @Path("username") userName: String,
         @Query("page") page: Int,
-        @Query("per_page") pageSize: Int
+        @Query("per_page") pageSize: Int,
+        @Query("sort") sortBy: String = Constants.DEFAULT_SORT_GITHUB,
+        @Query("direction") orderBy: String = Constants.DEFAULT_ORDER_BY
     ): List<RepositoryDto>
 }

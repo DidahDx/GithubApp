@@ -18,7 +18,8 @@ class FollowViewModel @Inject constructor(
     private val usersRepository: UsersRepository
 ) : ViewModel() {
 
-    private var login = savedStateHandle.getLiveData(UserDetailsViewModel.LOGIN, "")
+    private var login  : MutableLiveData<String>
+    = savedStateHandle.getLiveData(UserDetailsViewModel.LOGIN)
     var isFollowing = savedStateHandle.getLiveData(IS_FOLLOWING, true)
     val user = MutableLiveData<List<User>>()
 

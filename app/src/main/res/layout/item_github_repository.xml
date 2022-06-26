@@ -4,21 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:background="?android:attr/selectableItemBackground"
-    android:layout_margin="2dp"
     android:padding="2dp">
 
     <TextView
         android:id="@+id/tv_archived"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_archive_gradient"
+        android:background="@color/github_archive_1"
         android:gravity="center"
         android:padding="6dp"
         android:text="@string/repository_archived"
-        android:textColor="@color/white"
+        android:textColor="@color/github_archive_text"
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,11 +62,11 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="3dp"
         android:padding="3dp"
+        android:text="@string/repository_forked"
         android:textStyle="italic|bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_name"
-        android:text="@string/repository_forked" />
+        app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
     <TextView
         android:id="@+id/tv_description"
@@ -99,21 +99,6 @@
             app:singleSelection="true" />
     </HorizontalScrollView>
 
-    <TextView
-        android:id="@+id/tv_watchers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="3dp"
-        android:layout_marginEnd="3dp"
-        android:drawablePadding="7dp"
-        android:gravity="center_vertical"
-        android:padding="4dp"
-        app:drawableStartCompat="@drawable/ic_watchers"
-        app:layout_constraintEnd_toStartOf="@id/tv_stars"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hs_topic"
-        tools:text="3 watching" />
 
     <TextView
         android:id="@+id/tv_stars"
@@ -125,10 +110,26 @@
         android:padding="4dp"
         android:visibility="visible"
         app:drawableStartCompat="@drawable/ic_star"
-        app:layout_constraintEnd_toStartOf="@id/tv_language"
-        app:layout_constraintStart_toEndOf="@id/tv_watchers"
+        app:layout_constraintEnd_toStartOf="@id/tv_issues"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/hs_topic"
         tools:text="3" />
+
+    <TextView
+        android:id="@+id/tv_issues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="3dp"
+        android:drawablePadding="7dp"
+        android:gravity="center_vertical"
+        android:padding="4dp"
+        app:drawableStartCompat="@drawable/ic_issues"
+        app:layout_constraintEnd_toStartOf="@id/tv_language"
+        app:layout_constraintStart_toEndOf="@id/tv_stars"
+        app:layout_constraintTop_toBottomOf="@id/hs_topic"
+        tools:text="3 issues" />
+
 
     <TextView
         android:id="@+id/tv_language"
@@ -140,7 +141,7 @@
         android:padding="4dp"
         app:drawableStartCompat="@drawable/ic_code"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_stars"
+        app:layout_constraintStart_toEndOf="@id/tv_issues"
         app:layout_constraintTop_toBottomOf="@id/hs_topic"
         tools:text="Kotlin" />
 
@@ -153,25 +154,14 @@
         android:gravity="center_vertical"
         android:padding="4dp"
         app:drawableStartCompat="@drawable/ic_git_fork"
-        app:layout_constraintEnd_toStartOf="@id/tv_issues"
+        app:layout_constraintEnd_toStartOf="@id/tv_license"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_watchers"
+        app:layout_constraintTop_toBottomOf="@id/tv_stars"
         tools:text="3 forks" />
 
-    <TextView
-        android:id="@+id/tv_issues"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="3dp"
-        android:drawablePadding="7dp"
-        android:gravity="center_vertical"
-        android:padding="4dp"
-        app:drawableStartCompat="@drawable/ic_issues"
-        app:layout_constraintEnd_toStartOf="@id/tv_license"
-        app:layout_constraintStart_toEndOf="@id/tv_fork"
-        app:layout_constraintTop_toBottomOf="@id/tv_watchers"
-        tools:text="3 issues" />
+
 
     <TextView
         android:id="@+id/tv_license"
@@ -179,16 +169,17 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="3dp"
         android:drawablePadding="7dp"
-        android:gravity="center_vertical"
-        android:padding="4dp"
         android:ellipsize="marquee"
+        android:gravity="center_vertical"
         android:marqueeRepeatLimit="marquee_forever"
+        android:padding="4dp"
         android:scrollHorizontally="true"
+        android:singleLine="true"
+        app:layout_constraintHorizontal_bias="0.7"
         app:drawableStartCompat="@drawable/ic_license"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_issues"
-        app:layout_constraintTop_toBottomOf="@id/tv_watchers"
-        tools:text="Mit licenseMit licenseMit licenseMit licenseMit license"
-        android:singleLine="true" />
+        app:layout_constraintStart_toEndOf="@id/tv_fork"
+        app:layout_constraintTop_toBottomOf="@id/tv_stars"
+        tools:text="Mit license Mit license Mit license Mit license Mit license Mit license " />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
