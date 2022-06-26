@@ -105,3 +105,9 @@ dependencies {
     // Testing Navigation
     androidTestImplementation uiTest.navigation_testing
 }
+
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}

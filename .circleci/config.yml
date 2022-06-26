@@ -39,7 +39,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       # The next step will run the unit tests
       - android/run-tests:
-          test-command: ./gradlew lint testDebug --continue
+          test-command: ./gradlew testDebug --continue
 
       # Then start the emulator and run the Instrumentation tests!
       - android/start-emulator-and-run-tests:
