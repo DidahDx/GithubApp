@@ -9,7 +9,7 @@
         android:id="@+id/searchFragment"
         android:name="com.github.didahdx.githubapp.ui.searchUsers.SearchFragment"
         android:label="@string/search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_userDetailsFragment"
             app:destination="@id/userDetailsFragment" />
@@ -18,12 +18,11 @@
         android:id="@+id/userDetailsFragment"
         android:name="com.github.didahdx.githubapp.ui.userDetails.UserDetailsFragment"
         android:label="@string/profile"
-        tools:layout="@layout/fragment_user_details" >
+        tools:layout="@layout/fragment_user_details">
         <argument
             app:argType="string"
             android:name="login"
-            android:defaultValue=""
-            />
+            android:defaultValue="" />
         <action
             android:id="@+id/action_userDetailsFragment_to_followFragment"
             app:destination="@id/followFragment" />
@@ -36,17 +35,16 @@
         android:id="@+id/followFragment"
         android:label="@string/follow"
         android:name="com.github.didahdx.githubapp.ui.follow.FollowFragment"
-        tools:layout="@layout/fragment_follow" >
+        tools:layout="@layout/fragment_follow">
         <argument
             app:argType="string"
             android:name="login"
-            android:defaultValue=""
-            />
+            android:defaultValue="" />
 
         <argument
             app:argType="boolean"
             android:name="is_following"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
         <action
             android:id="@+id/action_followFragment_to_userDetailsFragment"
             app:destination="@id/userDetailsFragment" />
@@ -56,12 +54,11 @@
         android:id="@+id/githubRepoFragment"
         android:name="com.github.didahdx.githubapp.ui.githubRepository.GithubRepoFragment"
         android:label="@string/repository"
-        tools:layout="@layout/fragment_github_repo" >
+        tools:layout="@layout/fragment_github_repo">
         <argument
             app:argType="string"
             android:name="login"
-            android:defaultValue=""
-            />
+            android:defaultValue="" />
     </fragment>
 
 

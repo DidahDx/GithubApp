@@ -162,7 +162,6 @@
         tools:text="3 forks" />
 
 
-
     <TextView
         android:id="@+id/tv_license"
         android:layout_width="0dp"

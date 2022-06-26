@@ -70,6 +70,11 @@ dependencies {
     implementation okhttp3.okhttp
     implementation okhttp3.logging_interceptor
 
+    //room
+    implementation room.room_runtime
+    kapt room.room_compiler
+    implementation room.room_ktx
+
     //logging
     implementation loggingLib.timber
     implementation loggingLib.orhanobut_logger
@@ -98,12 +103,14 @@ dependencies {
     //unit test
     testImplementation test.junit
     testImplementation test.paging3_common
+    testImplementation test.room_testing
 
     //ui test
     androidTestImplementation uiTest.ext_junit
     androidTestImplementation uiTest.espresso_core
     // Testing Navigation
     androidTestImplementation uiTest.navigation_testing
+
 }
 
 
