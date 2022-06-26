@@ -1,8 +1,7 @@
 package com.github.didahdx.githubapp.data.remote.api
 
+import com.github.didahdx.githubapp.BuildConfig.GITHUB_TOKEN
 import com.github.didahdx.githubapp.common.Constants
-import com.github.didahdx.githubapp.common.Constants.ACCEPT_HEADER
-import com.github.didahdx.githubapp.common.Constants.GITHUB_TOKEN
 import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
 import com.github.didahdx.githubapp.data.remote.dto.SearchUsers
 import com.github.didahdx.githubapp.data.remote.dto.User
@@ -15,7 +14,7 @@ import retrofit2.http.Query
 interface GitHubApiService {
 
 
-    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $GITHUB_TOKEN")
+    @Headers("Accept: application/vnd.github.v3+json", "Authorization: token $GITHUB_TOKEN")
     @GET("search/users")
     suspend fun searchUsers(
         @Query("q") user: String,
@@ -23,13 +22,13 @@ interface GitHubApiService {
         @Query("per_page") pageSize: Int
     ): SearchUsers
 
-    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $GITHUB_TOKEN")
+    @Headers("Accept: application/vnd.github.v3+json", "Authorization: token $GITHUB_TOKEN")
     @GET("users/{username}")
     suspend fun getUserDetails(
         @Path("username") userName: String
     ): UserDetails
 
-    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $GITHUB_TOKEN")
+    @Headers("Accept: application/vnd.github.v3+json", "Authorization: token $GITHUB_TOKEN")
     @GET("users/{username}/followers")
     suspend fun getFollowerUsersList(
         @Path("username") userName: String,
@@ -37,7 +36,7 @@ interface GitHubApiService {
         @Query("per_page") pageSize: Int
     ): List<User>
 
-    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $GITHUB_TOKEN")
+    @Headers("Accept: application/vnd.github.v3+json", "Authorization: token $GITHUB_TOKEN")
     @GET("users/{username}/following")
     suspend fun getFollowingUsersList(
         @Path("username") userName: String,
@@ -45,7 +44,7 @@ interface GitHubApiService {
         @Query("per_page") pageSize: Int
     ): List<User>
 
-    @Headers("Accept: $ACCEPT_HEADER", "Authorization: token $GITHUB_TOKEN")
+    @Headers("Accept: application/vnd.github.v3+json", "Authorization: token $GITHUB_TOKEN")
     @GET("users/{username}/repos")
     suspend fun getUsersRepositoryList(
         @Path("username") userName: String,

@@ -11,6 +11,4 @@ object Constants {
     const val PAGE_MAX_SIZE = PAGE_SIZE * PAGE_PREFETCHED_SIZE
     const val FIRST_PAGE = 1
 
-    const val GITHUB_TOKEN: String = BuildConfig.GITHUB_TOKEN
-    const val ACCEPT_HEADER = "application/vnd.github.v3+json"
 }
