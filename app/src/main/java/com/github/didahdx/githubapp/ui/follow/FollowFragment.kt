@@ -1,9 +1,7 @@
 package com.github.didahdx.githubapp.ui.follow
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,10 +12,8 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.didahdx.githubapp.R
 import com.github.didahdx.githubapp.common.extension.navigateSafe
-import com.github.didahdx.githubapp.data.remote.dto.User
+import com.github.didahdx.githubapp.data.model.User
 import com.github.didahdx.githubapp.databinding.FragmentFollowBinding
-import com.github.didahdx.githubapp.ui.searchUsers.OnItemClickListener
-import com.github.didahdx.githubapp.ui.searchUsers.UsersAdapter
 import com.github.didahdx.githubapp.ui.searchUsers.adapters.FooterLoadStateAdapter
 import com.github.didahdx.githubapp.ui.userDetails.UserDetailsViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -33,11 +29,13 @@ class FollowFragment : Fragment(R.layout.fragment_follow) {
     }
 
     private val viewModel: FollowViewModel by viewModels()
+    private var _binding: FragmentFollowBinding? = null
+    private val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentFollowBinding.bind(view)
-        val userAdapter = UsersAdapter(object : OnItemClickListener {
+        _binding = FragmentFollowBinding.bind(view)
+        val followsAdapter = UserAdapter(object : OnItemClick {
             override fun userClicked(user: User) {
                 val bundle = bundleOf(UserDetailsViewModel.LOGIN to user.login)
                 findNavController().navigateSafe(
@@ -49,23 +47,38 @@ class FollowFragment : Fragment(R.layout.fragment_follow) {
         })
 
 
+        val manager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+
+        val header = FooterLoadStateAdapter { followsAdapter.retry() }
+        binding.rvFollows.apply {
+            adapter = followsAdapter.withLoadStateHeaderAndFooter(
+                header = header,
+                footer = FooterLoadStateAdapter { followsAdapter.retry() }
+            )
+
+            layoutManager = manager
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
-            userAdapter.loadStateFlow.collect { loadState ->
+            followsAdapter.loadStateFlow.collect { loadState ->
                 val isListEmpty =
-                    loadState.refresh is LoadState.NotLoading && userAdapter.itemCount == 0
+                    loadState.refresh is LoadState.NotLoading && followsAdapter.itemCount == 0
                 // show empty list
                 binding.emptyList.isVisible = isListEmpty
 
-                if(loadState.refresh is LoadState.Loading){
-                    binding.rvFollows.isVisible = false
-                }else{
-                    // Only show the list if refresh succeeds.
-                    binding.rvFollows.isVisible = !isListEmpty
-                }
+                binding.rvFollows.isVisible =
+                    loadState.source.refresh is LoadState.NotLoading || loadState.mediator?.refresh is LoadState.NotLoading
 
                 // Show loading spinner during initial load or refresh.
-                binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-                binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+                binding.progressBar.isVisible = loadState.mediator?.refresh is LoadState.Loading
+                binding.retryButton.isVisible =
+                    loadState.mediator?.refresh is LoadState.Error && followsAdapter.itemCount == 0
+
+                header.loadState = loadState.mediator
+                    ?.refresh
+                    ?.takeIf { it is LoadState.Error && followsAdapter.itemCount > 0 }
+                    ?: loadState.prepend
 
                 val errorState = loadState.source.append as? LoadState.Error
                     ?: loadState.source.prepend as? LoadState.Error
@@ -81,29 +94,29 @@ class FollowFragment : Fragment(R.layout.fragment_follow) {
             }
         }
 
-        val manager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        binding.rvFollows.apply {
-            adapter = userAdapter.withLoadStateHeaderAndFooter(
-                header = FooterLoadStateAdapter { userAdapter.retry() },
-                footer = FooterLoadStateAdapter { userAdapter.retry() }
-            )
-
-            layoutManager = manager
+        binding.retryButton.setOnClickListener {
+            followsAdapter.retry()
         }
 
         viewModel.isFollowing.observe(viewLifecycleOwner) {
             if (it) {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.followingList.collectLatest(userAdapter::submitData)
+                    viewModel.followingList.collectLatest(followsAdapter::submitData)
                 }
             } else {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.followerList.collectLatest(userAdapter::submitData)
+                    viewModel.followerList.collectLatest(followsAdapter::submitData)
                 }
             }
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvFollows.adapter = null
+        _binding = null
     }
 
 }

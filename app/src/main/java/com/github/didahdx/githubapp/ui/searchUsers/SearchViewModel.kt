@@ -18,7 +18,7 @@ class SearchViewModel @Inject constructor(
         const val SEARCH_QUERY = "SEARCH_QUERY"
     }
 
-    private val searchUserQuery: MutableLiveData<String> =
+     val searchUserQuery: MutableLiveData<String> =
         savedStateHandle.getLiveData(SEARCH_QUERY)
 
     @OptIn(ExperimentalCoroutinesApi::class)

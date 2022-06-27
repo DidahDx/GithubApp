@@ -145,13 +145,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="3dp"
         android:layout_marginTop="4dp"
+        android:background="@drawable/background_click_ripple"
+        android:clickable="true"
         android:drawablePadding="3dp"
+        android:focusable="true"
         android:gravity="center_vertical"
         android:padding="3dp"
         android:visibility="gone"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/background_click_ripple"
         app:drawableStartCompat="@drawable/ic_person"
         app:layout_constraintEnd_toStartOf="@id/tv_following"
         app:layout_constraintStart_toStartOf="parent"
@@ -165,12 +165,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="3dp"
+        android:background="@drawable/background_click_ripple"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center_vertical"
         android:padding="3dp"
         android:visibility="gone"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/background_click_ripple"
         app:drawableStartCompat="@drawable/ic_dot"
         app:layout_constraintStart_toEndOf="@id/tv_followers"
         app:layout_constraintTop_toBottomOf="@id/tv_twitter"
@@ -178,23 +178,66 @@
         tools:visibility="visible" />
 
     <TextView
+        android:id="@+id/tv_repos"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:id="@+id/tv_repos"
-        app:layout_constraintTop_toBottomOf="@id/tv_followers"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="3dp"
+        android:background="@drawable/background_click_ripple"
+        android:clickable="true"
+        android:drawablePadding="19dp"
+        android:focusable="true"
         android:gravity="center_vertical"
         android:padding="6dp"
-        android:drawablePadding="19dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/background_click_ripple"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:text="@string/repository"
-        app:drawableStartCompat="@drawable/ic_repository" />
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_repository"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_followers"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="iv_profile,tv_bio,tv_blog,tv_company,tv_email,
+tv_followers,tv_following,tv_twitter,tv_location,tv_name,tv_repos,tv_login_name" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/retry_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retry"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/empty_list"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_results"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

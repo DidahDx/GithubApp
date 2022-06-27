@@ -3,9 +3,9 @@ package com.github.didahdx.githubapp.data.remote.api
 import com.github.didahdx.githubapp.BuildConfig.GITHUB_TOKEN
 import com.github.didahdx.githubapp.common.Constants
 import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
-import com.github.didahdx.githubapp.data.remote.dto.SearchUsers
-import com.github.didahdx.githubapp.data.remote.dto.User
-import com.github.didahdx.githubapp.data.remote.dto.UserDetails
+import com.github.didahdx.githubapp.data.remote.dto.SearchUsersDto
+import com.github.didahdx.githubapp.data.remote.dto.UserDetailsDto
+import com.github.didahdx.githubapp.data.remote.dto.UserDto
 import retrofit2.http.*
 
 interface GitHubApiService {
@@ -18,14 +18,14 @@ interface GitHubApiService {
         @Query("page") page: Int,
         @Query("per_page") pageSize: Int,
         @HeaderMap headers: Map<String, String> = mapOf("Authorization" to " token $GITHUB_TOKEN")
-    ): SearchUsers
+    ): SearchUsersDto
 
     @Headers("Accept: application/vnd.github.v3+json")
     @GET("users/{username}")
     suspend fun getUserDetails(
         @Path("username") userName: String,
         @HeaderMap headers: Map<String, String> = mapOf("Authorization" to " token $GITHUB_TOKEN")
-    ): UserDetails
+    ): UserDetailsDto
 
     @Headers("Accept: application/vnd.github.v3+json")
     @GET("users/{username}/followers")
@@ -34,7 +34,7 @@ interface GitHubApiService {
         @Query("page") page: Int,
         @Query("per_page") pageSize: Int,
         @HeaderMap headers: Map<String, String> = mapOf("Authorization" to " token $GITHUB_TOKEN")
-    ): List<User>
+    ): List<UserDto>
 
     @Headers("Accept: application/vnd.github.v3+json")
     @GET("users/{username}/following")
@@ -43,7 +43,7 @@ interface GitHubApiService {
         @Query("page") page: Int,
         @Query("per_page") pageSize: Int,
         @HeaderMap headers: Map<String, String> = mapOf("Authorization" to " token $GITHUB_TOKEN")
-    ): List<User>
+    ): List<UserDto>
 
     @Headers("Accept: application/vnd.github.v3+json")
     @GET("users/{username}/repos")

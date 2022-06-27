@@ -5,7 +5,7 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 
 class FooterLoadStateAdapter(private val retry: () -> Unit) :
-   LoadStateAdapter<LoadStateViewHolder>() {
+    LoadStateAdapter<LoadStateViewHolder>() {
     override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
     }

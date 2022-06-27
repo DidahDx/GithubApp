@@ -1,4 +1,4 @@
-package com.github.didahdx.githubapp.ui.searchUsers
+package com.github.didahdx.githubapp.ui.follow
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,50 +6,54 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.github.didahdx.githubapp.data.remote.dto.User
+import com.github.didahdx.githubapp.data.model.User
 import com.github.didahdx.githubapp.databinding.ItemUserBinding
 
-class UsersAdapter constructor(
-    private val onItemClickListener: OnItemClickListener
-) : PagingDataAdapter<User, UsersAdapter.UsersViewHolder>(UsersDiffUtil()) {
+class UserAdapter constructor(
+    private val onItemClickListener: OnItemClick
+) : PagingDataAdapter<User, UserAdapter.FollowsViewHolder>(UserDiffUtil()) {
 
-    inner class UsersViewHolder(private val binding: ItemUserBinding) :
+    inner class FollowsViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
                 val position = absoluteAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    getItem(position)?.let { user -> onItemClickListener.userClicked(user) }
+                    getItem(position)?.let { follows ->
+                        onItemClickListener.userClicked(
+                            follows
+                        )
+                    }
                 }
             }
         }
 
-        fun bind(user: User) {
+        fun bind(follows: User) {
             Glide.with(binding.root.context)
-                .load(user.avatarUrl)
+                .load(follows.avatarUrl)
                 .centerCrop()
                 .into(binding.profileImage)
 
-            binding.tvName.text = user.login
+            binding.tvName.text = follows.login
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowsViewHolder {
         val binding =
             ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return UsersViewHolder(binding)
+        return FollowsViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
-        getItem(position)?.let {user -> holder.bind(user) }
+    override fun onBindViewHolder(holder: FollowsViewHolder, position: Int) {
+        getItem(position)?.let { follows -> holder.bind(follows) }
     }
 }
 
-interface OnItemClickListener {
+interface OnItemClick {
     fun userClicked(user: User)
 }
 
-class UsersDiffUtil : DiffUtil.ItemCallback<User>() {
+class UserDiffUtil : DiffUtil.ItemCallback<User>() {
     override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
         return oldItem.id == newItem.id
     }

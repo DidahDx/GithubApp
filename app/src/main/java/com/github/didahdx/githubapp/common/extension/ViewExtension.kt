@@ -2,6 +2,7 @@ package com.github.didahdx.githubapp.common.extension
 
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import com.google.android.material.chip.Chip
 
 fun View.show(): View {
@@ -67,5 +68,20 @@ fun TextView.displayDataIfNotNull(
         }
     }
     return this
+}
+
+inline fun SearchView.onQueryTextSubmit(crossinline listener: (String) -> Unit) {
+    this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            if (!query.isNullOrBlank()) {
+                listener(query)
+            }
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            return true
+        }
+    })
 }
 

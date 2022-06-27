@@ -1,35 +1,34 @@
 package com.github.didahdx.githubapp.data.repository
 
 import androidx.paging.PagingData
-import com.github.didahdx.githubapp.common.Constants
-import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
-import com.github.didahdx.githubapp.data.remote.dto.User
-import com.github.didahdx.githubapp.data.remote.dto.UserDetails
+import com.github.didahdx.githubapp.common.util.Resource
+import com.github.didahdx.githubapp.data.local.enitities.*
+import com.github.didahdx.githubapp.data.remote.dto.UserDetailsDto
 import kotlinx.coroutines.flow.Flow
 
 interface UsersRepository {
 
     fun searchUser(
         user: String
-    ): Flow<PagingData<User>>
+    ): Flow<PagingData<SearchUserEntity>>
 
 
-     fun getUserDetails(
+    fun getUserDetails(
         userName: String
-    ): Flow<UserDetails>
+    ): Flow<Resource<UserDetailsEntity>>
 
 
     fun getFollowerList(
         userName: String
-    ): Flow<PagingData<User>>
+    ): Flow<PagingData<FollowersEntity>>
 
 
     fun getFollowingList(
         userName: String
-    ): Flow<PagingData<User>>
+    ): Flow<PagingData<FollowingEntity>>
 
 
     fun getUsersRepositoryList(
         userName: String
-    ): Flow<PagingData<RepositoryDto>>
+    ): Flow<PagingData<RepositoryEntity>>
 }

@@ -4,21 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.didahdx.githubapp.R
 import com.github.didahdx.githubapp.common.extension.displayDataIfNotNull
 import com.github.didahdx.githubapp.common.extension.hide
 import com.github.didahdx.githubapp.common.extension.setVisibility
 import com.github.didahdx.githubapp.common.extension.show
-import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
-import com.github.didahdx.githubapp.data.remote.dto.User
+import com.github.didahdx.githubapp.data.local.enitities.RepositoryEntity
 import com.github.didahdx.githubapp.databinding.ItemGithubRepositoryBinding
 import com.google.android.material.chip.Chip
+import timber.log.Timber
 
 class RepoAdapter(
     private val onItemClickListener: OnItemClickListener
-) : PagingDataAdapter<RepositoryDto, RepoAdapter.RepoViewHolder>(RepoDiffUtil()) {
+) : PagingDataAdapter<RepositoryEntity, RepoAdapter.RepoViewHolder>(RepoDiffUtil()) {
 
     inner class RepoViewHolder(private val binding: ItemGithubRepositoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -27,16 +26,21 @@ class RepoAdapter(
             binding.root.setOnClickListener {
                 val position = absoluteAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    getItem(position)?.let { repositoryDto -> onItemClickListener.onClick(repositoryDto) }
+                    getItem(position)?.let { repositoryDto ->
+                        onItemClickListener.onClick(
+                            repositoryDto
+                        )
+                    }
                 }
             }
         }
-        fun bind(repositoryDto: RepositoryDto) {
+
+        fun bind(repositoryDto: RepositoryEntity) {
             binding.tvArchived.setVisibility(repositoryDto.archived)
             binding.tvName.displayDataIfNotNull(repositoryDto.name, null)
             binding.tvDefaultBranch.displayDataIfNotNull(repositoryDto.defaultBranch, null)
             binding.tvDescription.displayDataIfNotNull(repositoryDto.description, null)
-            binding.tvLicense.displayDataIfNotNull(repositoryDto.license?.name, null)
+            binding.tvLicense.displayDataIfNotNull(repositoryDto.license, null)
             binding.tvLicense.isSelected = true
             binding.tvForked.setVisibility(repositoryDto.fork)
 
@@ -58,8 +62,8 @@ class RepoAdapter(
 
             binding.chipGroupTopic.removeAllViews()
             val topics = repositoryDto.topics
-            if (!topics.isNullOrEmpty()) {
-                binding.hsTopic.show()
+            Timber.tag("topics").e(topics.toString())
+            if (!topics.isNullOrEmpty() && topics.isNotEmpty()) {
                 for (item in topics.indices) {
                     val chip = Chip(binding.chipGroupTopic.context)
                     val topicTextChip = topics[item]
@@ -67,6 +71,12 @@ class RepoAdapter(
                     chip.id = item
                     binding.chipGroupTopic.addView(chip)
                 }
+                if (topics[0]?.trim()?.isNotEmpty() == true) {
+                    binding.hsTopic.show()
+                } else {
+                    binding.hsTopic.hide()
+                }
+
             } else {
                 binding.hsTopic.hide()
             }
@@ -87,15 +97,15 @@ class RepoAdapter(
 }
 
 interface OnItemClickListener {
-    fun onClick(repositoryDto: RepositoryDto)
+    fun onClick(repositoryEntity: RepositoryEntity)
 }
 
-class RepoDiffUtil : DiffUtil.ItemCallback<RepositoryDto>() {
-    override fun areItemsTheSame(oldItem: RepositoryDto, newItem: RepositoryDto): Boolean {
+class RepoDiffUtil : DiffUtil.ItemCallback<RepositoryEntity>() {
+    override fun areItemsTheSame(oldItem: RepositoryEntity, newItem: RepositoryEntity): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: RepositoryDto, newItem: RepositoryDto): Boolean {
+    override fun areContentsTheSame(oldItem: RepositoryEntity, newItem: RepositoryEntity): Boolean {
         return oldItem == newItem
     }
 

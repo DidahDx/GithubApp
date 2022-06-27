@@ -12,7 +12,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.didahdx.githubapp.R
-import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
+import com.github.didahdx.githubapp.data.local.enitities.RepositoryEntity
 import com.github.didahdx.githubapp.databinding.FragmentGithubRepoBinding
 import com.github.didahdx.githubapp.ui.searchUsers.adapters.FooterLoadStateAdapter
 import com.google.android.material.snackbar.Snackbar
@@ -27,12 +27,14 @@ class GithubRepoFragment : Fragment(R.layout.fragment_github_repo) {
 
     private val viewModel: GithubRepoViewModel by viewModels()
 
+    private var _binding: FragmentGithubRepoBinding? = null
+    private val binding get() = _binding!!
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentGithubRepoBinding.bind(view)
+         _binding = FragmentGithubRepoBinding.bind(view)
         val repoAdapter = RepoAdapter(object : OnItemClickListener {
-            override fun onClick(repositoryDto: RepositoryDto) {
-                val url = repositoryDto.htmlUrl
+            override fun onClick(repositoryEntity: RepositoryEntity) {
+                val url = repositoryEntity.htmlUrl
                 try {
                     val blogIntent = Intent(Intent.ACTION_VIEW)
                     blogIntent.data = Uri.parse(url)
@@ -48,6 +50,20 @@ class GithubRepoFragment : Fragment(R.layout.fragment_github_repo) {
             }
         })
 
+        val itemDecoration = DividerItemDecoration(
+            requireContext(),
+            DividerItemDecoration.VERTICAL
+        )
+        val manager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val header = FooterLoadStateAdapter { repoAdapter.retry() }
+        binding.rvRepos.apply {
+            adapter = repoAdapter.withLoadStateHeaderAndFooter(
+                header = header,
+                footer = FooterLoadStateAdapter { repoAdapter.retry() }
+            )
+            layoutManager = manager
+            addItemDecoration(itemDecoration)
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             repoAdapter.loadStateFlow.collect { loadState ->
@@ -56,15 +72,20 @@ class GithubRepoFragment : Fragment(R.layout.fragment_github_repo) {
                 // show empty list
                 binding.emptyList.isVisible = isListEmpty
 
-                if(loadState.refresh is LoadState.Loading){
-                    binding.rvRepos.isVisible = false
-                }else{
-                    // Only show the list if refresh succeeds.
-                    binding.rvRepos.isVisible = !isListEmpty
-                }
+
+                // Only show the list if refresh succeeds.
+                binding.rvRepos.isVisible =
+                    loadState.source.refresh is LoadState.NotLoading || loadState.mediator?.refresh is LoadState.NotLoading
+
                 // Show loading spinner during initial load or refresh.
-                binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-                binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+                binding.progressBar.isVisible = loadState.mediator?.refresh is LoadState.Loading
+                binding.retryButton.isVisible =
+                    loadState.mediator?.refresh is LoadState.Error && repoAdapter.itemCount == 0
+
+                header.loadState = loadState.mediator
+                    ?.refresh
+                    ?.takeIf { it is LoadState.Error && repoAdapter.itemCount > 0 }
+                    ?: loadState.prepend
 
                 val errorState = loadState.source.append as? LoadState.Error
                     ?: loadState.source.prepend as? LoadState.Error
@@ -80,19 +101,11 @@ class GithubRepoFragment : Fragment(R.layout.fragment_github_repo) {
             }
         }
 
-        val itemDecoration = DividerItemDecoration(
-            requireContext(),
-            DividerItemDecoration.VERTICAL
-        )
-        val manager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.rvRepos.apply {
-            adapter = repoAdapter.withLoadStateHeaderAndFooter(
-                header = FooterLoadStateAdapter { repoAdapter.retry() },
-                footer = FooterLoadStateAdapter { repoAdapter.retry() }
-            )
-            layoutManager = manager
-            addItemDecoration(itemDecoration)
+
+        binding.retryButton.setOnClickListener {
+            repoAdapter.retry()
         }
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.githubRepository.collectLatest(repoAdapter::submitData)
@@ -100,4 +113,10 @@ class GithubRepoFragment : Fragment(R.layout.fragment_github_repo) {
 
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvRepos.adapter = null
+        _binding =null
+    }
 }

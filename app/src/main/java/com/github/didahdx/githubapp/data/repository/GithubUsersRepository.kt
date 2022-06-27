@@ -1,72 +1,126 @@
 package com.github.didahdx.githubapp.data.repository
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.room.withTransaction
 import com.github.didahdx.githubapp.common.Constants
-import com.github.didahdx.githubapp.data.pagingSource.FollowersPagingSource
-import com.github.didahdx.githubapp.data.pagingSource.FollowingPagingSource
-import com.github.didahdx.githubapp.data.pagingSource.RepositoryPagingSource
-import com.github.didahdx.githubapp.data.pagingSource.SearchPagingSource
+import com.github.didahdx.githubapp.common.util.Network
+import com.github.didahdx.githubapp.common.util.networkBoundResource
+import com.github.didahdx.githubapp.data.local.GithubDatabase
+import com.github.didahdx.githubapp.data.local.dao.*
+import com.github.didahdx.githubapp.data.local.enitities.FollowersEntity
+import com.github.didahdx.githubapp.data.local.enitities.FollowingEntity
+import com.github.didahdx.githubapp.data.local.enitities.RepositoryEntity
+import com.github.didahdx.githubapp.data.local.enitities.SearchUserEntity
 import com.github.didahdx.githubapp.data.remote.api.GitHubApiService
-import com.github.didahdx.githubapp.data.remote.dto.RepositoryDto
-import com.github.didahdx.githubapp.data.remote.dto.User
-import com.github.didahdx.githubapp.data.remote.dto.UserDetails
+import com.github.didahdx.githubapp.data.remote.dto.UserDetailsDto
+import com.github.didahdx.githubapp.data.remoteMediator.FollowersRemoteMediator
+import com.github.didahdx.githubapp.data.remoteMediator.FollowingRemoteMediator
+import com.github.didahdx.githubapp.data.remoteMediator.RepositoryRemoteMediator
+import com.github.didahdx.githubapp.data.remoteMediator.SearchRemoteMediator
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GithubUsersRepository @Inject constructor(
-    private val gitHubApiService: GitHubApiService
+    private val gitHubApiService: GitHubApiService,
+    private val remoteKeysDao: RemoteKeysDao,
+    private val githubDatabase: GithubDatabase,
+    private val followerDao: FollowerDao,
+    private val followingDao: FollowingDao,
+    private val searchDao: SearchDao,
+    private val userDetailsDao: UserDetailsDao,
+    private val repositoryDao: RepositoryDao,
+    private val network: Network
 ) : UsersRepository {
 
-    override fun searchUser(user: String): Flow<PagingData<User>> {
+    @OptIn(ExperimentalPagingApi::class)
+    override fun searchUser(user: String): Flow<PagingData<SearchUserEntity>> {
         return Pager(
             config = PagingConfig(
                 pageSize = Constants.PAGE_SIZE,
                 enablePlaceholders = false,
                 maxSize = Constants.PAGE_MAX_SIZE
             ),
-            pagingSourceFactory = { SearchPagingSource(gitHubApiService, user) }
+            remoteMediator = SearchRemoteMediator(
+                gitHubApiService, user, searchDao, remoteKeysDao, githubDatabase
+            ),
+            pagingSourceFactory = { searchDao.getUsersByQuery() }
         ).flow
     }
 
-    override fun getUserDetails(userName: String): Flow<UserDetails> = flow {
-        emit(gitHubApiService.getUserDetails(userName))
-    }
+    override fun getUserDetails(userName: String) = networkBoundResource(
+        query = {
+            userDetailsDao.getUserDetailByLogin(userName)
+        },
+        fetch = {
+            gitHubApiService.getUserDetails(userName)
+        },
+        saveFetchResult = { userDetailsDto ->
+            githubDatabase.withTransaction {
+                userDetailsDao.clearUserDetails()
+                userDetailsDao.insert(userDetailsDto.mapToUserDetailsEntity())
+            }
+        },
+        shouldFetch = { _ ->
+            network.isNetworkAvailable()
+        }
 
-    override fun getFollowerList(userName: String): Flow<PagingData<User>> {
+    )
+
+    @OptIn(ExperimentalPagingApi::class)
+    override fun getFollowerList(userName: String): Flow<PagingData<FollowersEntity>> {
         return Pager(
             config = PagingConfig(
                 pageSize = Constants.PAGE_SIZE,
                 enablePlaceholders = false,
                 maxSize = Constants.PAGE_MAX_SIZE
             ),
-            pagingSourceFactory = { FollowersPagingSource(gitHubApiService, userName) }
+            remoteMediator = FollowersRemoteMediator(
+                gitHubApiService,
+                userName,
+                followerDao,
+                remoteKeysDao,
+                githubDatabase
+            ),
+            pagingSourceFactory = { followerDao.getUsersByQuery(userName) }
         ).flow
     }
 
-    override fun getFollowingList(userName: String): Flow<PagingData<User>> {
+    @OptIn(ExperimentalPagingApi::class)
+    override fun getFollowingList(userName: String): Flow<PagingData<FollowingEntity>> {
         return Pager(
             config = PagingConfig(
                 pageSize = Constants.PAGE_SIZE,
                 enablePlaceholders = false,
                 maxSize = Constants.PAGE_MAX_SIZE
             ),
-            pagingSourceFactory = { FollowingPagingSource(gitHubApiService, userName) }
+            remoteMediator = FollowingRemoteMediator(
+                gitHubApiService, userName, followingDao, remoteKeysDao, githubDatabase
+            ),
+            pagingSourceFactory = { followingDao.getUsersByQuery(userName) }
         ).flow
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     override fun getUsersRepositoryList(
         userName: String
-    ): Flow<PagingData<RepositoryDto>> {
+    ): Flow<PagingData<RepositoryEntity>> {
         return Pager(
             config = PagingConfig(
                 pageSize = Constants.PAGE_SIZE,
                 enablePlaceholders = false,
                 maxSize = Constants.PAGE_MAX_SIZE
             ),
-            pagingSourceFactory = { RepositoryPagingSource(gitHubApiService, userName) }
+            remoteMediator = RepositoryRemoteMediator(
+                gitHubApiService,
+                userName,
+                repositoryDao,
+                remoteKeysDao,
+                githubDatabase
+            ),
+            pagingSourceFactory = { repositoryDao.getRepositoryBy(userName) }
         ).flow
     }
 }

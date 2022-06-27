@@ -15,9 +15,12 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.didahdx.githubapp.R
 import com.github.didahdx.githubapp.common.extension.navigateSafe
-import com.github.didahdx.githubapp.data.remote.dto.User
+import com.github.didahdx.githubapp.common.extension.onQueryTextSubmit
+import com.github.didahdx.githubapp.data.local.enitities.SearchUserEntity
 import com.github.didahdx.githubapp.databinding.FragmentSearchBinding
 import com.github.didahdx.githubapp.ui.searchUsers.adapters.FooterLoadStateAdapter
+import com.github.didahdx.githubapp.ui.searchUsers.adapters.OnItemClick
+import com.github.didahdx.githubapp.ui.searchUsers.adapters.SearchUsersAdapter
 import com.github.didahdx.githubapp.ui.userDetails.UserDetailsViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,12 +28,13 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private val viewModel: SearchViewModel by viewModels()
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,37 +44,48 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     @OptIn(InternalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentSearchBinding.bind(view)
-        val searchAdapter = UsersAdapter(object : OnItemClickListener {
-            override fun userClicked(user: User) {
+        _binding = FragmentSearchBinding.bind(view)
+        val searchUsersAdapter = SearchUsersAdapter(object : OnItemClick {
+            override fun userClicked(user: SearchUserEntity) {
                 val bundle = bundleOf(UserDetailsViewModel.LOGIN to user.login)
                 findNavController().navigateSafe(
                     R.id.action_searchFragment_to_userDetailsFragment,
                     bundle
                 )
-                Timber.e(user.toString())
             }
         })
 
+        val manager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val header = FooterLoadStateAdapter { searchUsersAdapter.retry() }
+        binding.rvUsers.apply {
+            adapter = searchUsersAdapter.withLoadStateHeaderAndFooter(
+                header = header,
+                footer = FooterLoadStateAdapter { searchUsersAdapter.retry() }
+            )
+            layoutManager = manager
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            searchAdapter.loadStateFlow.collect { loadState ->
+            searchUsersAdapter.loadStateFlow.collect { loadState ->
                 val isListEmpty =
-                    loadState.refresh is LoadState.NotLoading && searchAdapter.itemCount == 0
+                    loadState.refresh is LoadState.NotLoading && searchUsersAdapter.itemCount == 0
                 // show empty list
                 binding.emptyList.isVisible = isListEmpty
 
-                if(loadState.refresh is LoadState.Loading){
-                    binding.rvUsers.isVisible = false
-                }else{
-                    // Only show the list if refresh succeeds.
-                    binding.rvUsers.isVisible = !isListEmpty
-                }
+                // Only show the list if refresh succeeds.
+                binding.rvUsers.isVisible =
+                    loadState.source.refresh is LoadState.NotLoading || loadState.mediator?.refresh is LoadState.NotLoading
 
                 // Show loading spinner during initial load or refresh.
-                binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-                binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+                binding.progressBar.isVisible = loadState.mediator?.refresh is LoadState.Loading
+                binding.retryButton.isVisible =
+                    loadState.mediator?.refresh is LoadState.Error && searchUsersAdapter.itemCount == 0
 
+
+                header.loadState = loadState.mediator
+                    ?.refresh
+                    ?.takeIf { it is LoadState.Error && searchUsersAdapter.itemCount > 0 }
+                    ?: loadState.prepend
 
                 val errorState = loadState.source.append as? LoadState.Error
                     ?: loadState.source.prepend as? LoadState.Error
@@ -86,18 +101,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         }
 
-        val manager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        binding.rvUsers.apply {
-            adapter = searchAdapter.withLoadStateHeaderAndFooter(
-                header = FooterLoadStateAdapter { searchAdapter.retry() },
-                footer = FooterLoadStateAdapter { searchAdapter.retry() }
-            )
-            layoutManager = manager
+
+        binding.retryButton.setOnClickListener {
+            searchUsersAdapter.retry()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.users.collectLatest(searchAdapter::submitData)
+            viewModel.users.collectLatest(searchUsersAdapter::submitData)
         }
 
     }
@@ -108,19 +119,22 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null && query.isNotEmpty()) {
-                    viewModel.searchUser(query)
-                }
-                return true
-            }
+        val pendingQuery = viewModel.searchUserQuery.value
+        if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+            searchItem.expandActionView()
+            searchView.setQuery(pendingQuery, false)
+        }
+        searchView.onQueryTextSubmit { query ->
+            viewModel.searchUser(query)
+            searchView.clearFocus()
+        }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
+    }
 
-        })
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvUsers.adapter = null
+        _binding = null
     }
 
 }

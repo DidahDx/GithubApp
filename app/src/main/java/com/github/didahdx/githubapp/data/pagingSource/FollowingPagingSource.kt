@@ -4,22 +4,22 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.github.didahdx.githubapp.common.Constants
 import com.github.didahdx.githubapp.data.remote.api.GitHubApiService
-import com.github.didahdx.githubapp.data.remote.dto.User
+import com.github.didahdx.githubapp.data.remote.dto.UserDto
 import retrofit2.HttpException
 import java.io.IOException
 
 class FollowingPagingSource constructor(
     private val gitHubApiService: GitHubApiService,
     private val query: String
-) : PagingSource<Int, User>() {
-    override fun getRefreshKey(state: PagingState<Int, User>): Int? {
+) : PagingSource<Int, UserDto>() {
+    override fun getRefreshKey(state: PagingState<Int, UserDto>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserDto> {
         val position = params.key ?: Constants.FIRST_PAGE
         return try {
             val repos = gitHubApiService.getFollowingUsersList(query, position, params.loadSize)

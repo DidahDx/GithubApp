@@ -1,6 +1,6 @@
 ext {
     nav_version = "2.4.2"
-    pagingVersion = "3.1.1"
+    pagingVersion = "3.1.0"
     lottieVersion = "5.2.0"
     retrofitVersion = "2.9.0"
     moshiKotlinVersion = "1.11.0"
@@ -36,11 +36,16 @@ ext {
     espressoCoreVersion = "3.4.0"
     junitVersion = "4.13.2"
 
+    fragmentVersion = "1.4.1"
+
+
     room = [
             room_runtime : "androidx.room:room-runtime:$roomVersion",
             room_compiler: "androidx.room:room-compiler:$roomVersion",
             // optional - Kotlin Extensions and Coroutines support for Room
-            room_ktx     : "androidx.room:room-ktx:$roomVersion"
+            room_ktx     : "androidx.room:room-ktx:$roomVersion",
+            room_paging  : "androidx.room:room-paging:$roomVersion"
+
     ]
 
     paging3 = [
@@ -103,6 +108,7 @@ ext {
             core_ktx        : "androidx.core:core-ktx:$coreKtxVersion",
             appcompat       : "androidx.appcompat:appcompat:$appcompatVersion",
             constraintlayout: "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion",
+            fragment_ktx: "androidx.fragment:fragment-ktx:$fragmentVersion"
     ]
 
     lifecycle = [

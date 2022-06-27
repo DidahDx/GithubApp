@@ -49,6 +49,7 @@ dependencies {
     implementation androidx.appcompat
     implementation materialAndroid.material
     implementation androidx.constraintlayout
+    implementation androidx.fragment_ktx
     implementation legacySupport.legacy_support_v4
 
     //lifecycle
@@ -74,6 +75,7 @@ dependencies {
     implementation room.room_runtime
     kapt room.room_compiler
     implementation room.room_ktx
+    implementation room.room_paging
 
     //logging
     implementation loggingLib.timber
