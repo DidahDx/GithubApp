@@ -62,7 +62,6 @@ class RepoAdapter(
 
             binding.chipGroupTopic.removeAllViews()
             val topics = repositoryDto.topics
-            Timber.tag("topics").e(topics.toString())
             if (!topics.isNullOrEmpty() && topics.isNotEmpty()) {
                 for (item in topics.indices) {
                     val chip = Chip(binding.chipGroupTopic.context)

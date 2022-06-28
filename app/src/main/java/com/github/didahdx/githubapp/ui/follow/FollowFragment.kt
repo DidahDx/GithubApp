@@ -87,7 +87,7 @@ class FollowFragment : Fragment(R.layout.fragment_follow) {
                 errorState?.let {
                     Snackbar.make(
                         binding.root,
-                        getString(R.string.error_message, it.error),
+                        getString(R.string.error_message, it.error.localizedMessage ?: getString(R.string.something_went_wrong)),
                         Snackbar.LENGTH_LONG
                     ).show()
                 }

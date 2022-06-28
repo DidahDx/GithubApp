@@ -20,7 +20,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "GITHUB_TOKEN",  "\"" + localProperties['GITHUB_TOKEN'] + "\"")
+        buildConfigField("String", "GITHUB_TOKEN", "\"" + localProperties['GITHUB_TOKEN'] + "\"")
     }
 
     buildTypes {
@@ -106,12 +106,28 @@ dependencies {
     testImplementation test.junit
     testImplementation test.paging3_common
     testImplementation test.room_testing
+    testImplementation test.hamcrest_all
+    testImplementation test.arch_core_testing
+    testImplementation test.robolectric
+    testImplementation test.mockito_core
+    testImplementation test.okhttp3_mockwebserver
+
 
     //ui test
+    androidTestImplementation test.junit
+    androidTestImplementation test.arch_core_testing
+    androidTestImplementation test.mockito_core
+    androidTestImplementation test.okhttp3_mockwebserver
     androidTestImplementation uiTest.ext_junit
+    //espresso
     androidTestImplementation uiTest.espresso_core
+    androidTestImplementation uiTest.espresso_contrib
+    androidTestImplementation uiTest.espresso_intents
     // Testing Navigation
     androidTestImplementation uiTest.navigation_testing
+    androidTestImplementation uiTest.mockito_android
+    androidTestImplementation uiTest.androidx_rules
+    androidTestImplementation uiTest.androidx_runner
 
 }
 

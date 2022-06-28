@@ -20,4 +20,5 @@
     <string name="no_results">No results</string>
     <string name="retry">Retry</string>
     <string name="error_message">😨 Wooops %s</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

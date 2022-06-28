@@ -42,6 +42,11 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
                     binding.retryButton.show()
                     binding.progressBar.hide()
                     binding.emptyList.hide()
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.error_message, resource.error?.localizedMessage?: R.string.something_went_wrong),
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
 
                 is Resource.Loading -> {
