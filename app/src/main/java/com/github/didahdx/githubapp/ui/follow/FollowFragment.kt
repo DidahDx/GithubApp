@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 class FollowFragment : Fragment(R.layout.fragment_follow) {
     companion object {
         const val IS_FOLLOWING = "is_following"
+        const val TITLE="title"
     }
 
     private val viewModel: FollowViewModel by viewModels()

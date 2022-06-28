@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/followFragment"
-        android:label="@string/follow"
+        android:label="{title}"
         android:name="com.github.didahdx.githubapp.ui.follow.FollowFragment"
         tools:layout="@layout/fragment_follow">
         <argument
@@ -45,6 +45,10 @@
             app:argType="boolean"
             android:name="is_following"
             android:defaultValue="true" />
+
+        <argument
+            android:name="title"
+            app:argType="string" />
         <action
             android:id="@+id/action_followFragment_to_userDetailsFragment"
             app:destination="@id/userDetailsFragment" />

@@ -18,6 +18,7 @@ import com.github.didahdx.githubapp.common.util.Resource
 import com.github.didahdx.githubapp.data.local.enitities.UserDetailsEntity
 import com.github.didahdx.githubapp.databinding.FragmentUserDetailsBinding
 import com.github.didahdx.githubapp.ui.follow.FollowFragment.Companion.IS_FOLLOWING
+import com.github.didahdx.githubapp.ui.follow.FollowFragment.Companion.TITLE
 import com.github.didahdx.githubapp.ui.userDetails.UserDetailsViewModel.Companion.LOGIN
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -136,7 +137,8 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
                 setOnClickListener {
                     val bundle = bundleOf(
                         LOGIN to userDetail.login,
-                        IS_FOLLOWING to false
+                        IS_FOLLOWING to false,
+                        TITLE to getString(R.string.follower)
                     )
                     findNavController()
                         .navigateSafe(
@@ -152,7 +154,9 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
                 setOnClickListener {
                     val bundle = bundleOf(
                         LOGIN to userDetail.login,
-                        IS_FOLLOWING to true
+                        IS_FOLLOWING to true,
+                        TITLE to getString(R.string.following)
+
                     )
                     findNavController()
                         .navigateSafe(
