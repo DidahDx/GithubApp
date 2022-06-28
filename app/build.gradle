@@ -1,0 +1,138 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+
+android {
+    compileSdk 32
+
+    def localProperties = new Properties()
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
+    defaultConfig {
+        applicationId "com.github.didahdx.githubapp"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "GITHUB_TOKEN", "\"" + localProperties['GITHUB_TOKEN'] + "\"")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
+    }
+}
+
+dependencies {
+
+    implementation androidx.core_ktx
+    implementation androidx.appcompat
+    implementation materialAndroid.material
+    implementation androidx.constraintlayout
+    implementation androidx.fragment_ktx
+    implementation legacySupport.legacy_support_v4
+
+    //lifecycle
+    implementation lifecycle.livedata_ktx
+    implementation lifecycle.viewmodel_ktx
+    implementation lifecycle.viewmodel_savedstate
+
+
+    // Kotlin
+    implementation navigationLib.navigation_fragment_ktx
+    implementation navigationLib.navigation_ui_ktx
+
+    //retrofit
+    implementation retrofit.retrofit
+    implementation retrofit.moshi_kotlin
+    implementation retrofit.converter_moshi
+    implementation(platform(okhttp3.okhttp_bom))
+    // define any required OkHttp artifacts without version
+    implementation okhttp3.okhttp
+    implementation okhttp3.logging_interceptor
+
+    //room
+    implementation room.room_runtime
+    kapt room.room_compiler
+    implementation room.room_ktx
+    implementation room.room_paging
+
+    //logging
+    implementation loggingLib.timber
+    implementation loggingLib.orhanobut_logger
+
+    //dagger hilt
+    implementation daggerHiltLib.hilt_android
+    kapt daggerHiltLib.hilt_compiler
+    implementation daggerHiltLib.hilt_lifecycle_viewmodel
+    kapt daggerHiltLib.androidx_hilt_compiler
+
+    implementation airbnbLottie.lottie
+
+    //glide
+    implementation bumptech.glide
+    kapt bumptech.glide_complie
+
+    // Coroutines
+    implementation coroutines.coroutines_core
+    implementation coroutines.coroutines_android
+
+    implementation circleImageView.hdodenhof
+    implementation paging3.paging_runtime
+
+    debugImplementation leakcanary.leakcanary_android
+
+    //unit test
+    testImplementation test.junit
+    testImplementation test.paging3_common
+    testImplementation test.room_testing
+    testImplementation test.hamcrest_all
+    testImplementation test.arch_core_testing
+    testImplementation test.robolectric
+    testImplementation test.mockito_core
+    testImplementation test.okhttp3_mockwebserver
+
+
+    //ui test
+    androidTestImplementation test.junit
+    androidTestImplementation test.arch_core_testing
+    androidTestImplementation test.mockito_core
+    androidTestImplementation test.okhttp3_mockwebserver
+    androidTestImplementation uiTest.ext_junit
+    //espresso
+    androidTestImplementation uiTest.espresso_core
+    androidTestImplementation uiTest.espresso_contrib
+    androidTestImplementation uiTest.espresso_intents
+    // Testing Navigation
+    androidTestImplementation uiTest.navigation_testing
+    androidTestImplementation uiTest.mockito_android
+    androidTestImplementation uiTest.androidx_rules
+    androidTestImplementation uiTest.androidx_runner
+
+}
+
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
