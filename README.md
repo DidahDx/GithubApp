@@ -2,7 +2,7 @@
 
 - Demo Android application consuming the [github api](https://docs.github.com/en/rest)
 
-## Table contents
+## Table of contents
 - [Project Setup](#project-setup)
 - [ScreenShots](#screenshots)
 - [Libraries](#libraries)
@@ -13,7 +13,7 @@
 - You will need to generate the github token to make the project work. You can find the
   guide [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
-- Add the token to the local.properties it should be similar to below.
+- Add the token to the local.properties file it should be similar to below.
 ``` 
   GITHUB_TOKEN=REPLACE_THIS_WITH_YOUR_TOKEN_HERE 
   
