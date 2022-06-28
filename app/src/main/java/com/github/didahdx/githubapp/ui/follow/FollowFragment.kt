@@ -1,5 +1,7 @@
 package com.github.didahdx.githubapp.ui.follow
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -21,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class FollowFragment : Fragment(R.layout.fragment_follow) {
@@ -38,11 +41,19 @@ class FollowFragment : Fragment(R.layout.fragment_follow) {
         _binding = FragmentFollowBinding.bind(view)
         val followsAdapter = UserAdapter(object : OnItemClick {
             override fun userClicked(user: User) {
-                val bundle = bundleOf(UserDetailsViewModel.LOGIN to user.login)
-                findNavController().navigateSafe(
-                    R.id.action_followFragment_to_userDetailsFragment,
-                    bundle
-                )
+              val url = user.htmlUrl
+                try {
+                    val blogIntent = Intent(Intent.ACTION_VIEW)
+                    blogIntent.data = Uri.parse(url)
+                    startActivity(blogIntent)
+                } catch (e: Exception) {
+                    Timber.e(e)
+                    val message =
+                        getString(R.string.no_application_available, url)
+                    val snackbar =
+                        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+                    snackbar.show()
+                }
             }
 
         })
