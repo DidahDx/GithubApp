@@ -11,9 +11,9 @@
   ``` GITHUB_TOKEN=REPLACE_THIS_WITH_YOUR_TOKEN_HERE  ```
 
 ## ScreenShots
- <img src="art/square_search.png" width="200" style="max-width:100%;"> <img src="art/square_repo.png" width="200" style="max-width:100%;"> 
- <img src="art/didahdx.png" width="200" style="max-width:100%;"> <img src="art/following.png" width="200" style="max-width:100%;"> 
- <img src="art/followers.png" width="200" style="max-width:100%;"> 
+ <img src="art/square_search.png" width="200" style="max-width:100%;">  <img src="art/square_profile.png" width="200" style="max-width:100%;">
+<img src="art/square_repo.png" width="200" style="max-width:100%;"> <img src="art/didahdx.png" width="200" style="max-width:100%;">
+<img src="art/following.png" width="200" style="max-width:100%;"> <img src="art/followers.png" width="200" style="max-width:100%;"> 
 
 ## Libraries
 
