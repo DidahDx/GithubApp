@@ -2,7 +2,7 @@
 
 - Demo Android application consuming the [github api](https://docs.github.com/en/rest)
 
-## Table contents
+## Table of contents
 - [Project Setup](#project-setup)
 - [ScreenShots](#screenshots)
 - [Libraries](#libraries)
