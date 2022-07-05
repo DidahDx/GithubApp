@@ -111,6 +111,11 @@ dependencies {
     testImplementation test.robolectric
     testImplementation test.mockito_core
     testImplementation test.okhttp3_mockwebserver
+    // For Robolectric tests.
+    testImplementation test.hilt_android_testing
+    // ...with Kotlin.
+    kaptTest test.hilt_android_compiler
+
 
 
     //ui test
@@ -128,6 +133,15 @@ dependencies {
     androidTestImplementation uiTest.mockito_android
     androidTestImplementation uiTest.androidx_rules
     androidTestImplementation uiTest.androidx_runner
+    androidTestImplementation uiTest.fragment_testing
+    debugImplementation uiTest.fragment_testing
+
+
+    // For instrumented tests.
+    androidTestImplementation test.hilt_android_testing
+    // ...with Kotlin.
+    kaptAndroidTest test.hilt_android_compiler
+
 
 }
 
