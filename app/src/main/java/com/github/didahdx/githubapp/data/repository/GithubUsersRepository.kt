@@ -46,7 +46,7 @@ class GithubUsersRepository @Inject constructor(
             remoteMediator = SearchRemoteMediator(
                 gitHubApiService, user, searchDao, remoteKeysDao, githubDatabase
             ),
-            pagingSourceFactory = { searchDao.getUsersByQuery() }
+            pagingSourceFactory = { searchDao.getUsersByQuery(user) }
         ).flow
     }
 

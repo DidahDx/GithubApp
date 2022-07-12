@@ -57,14 +57,15 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
                     binding.emptyList.hide()
                 }
                 is Resource.Success -> {
-                    binding.groupViews.show()
+//                    binding.groupViews.show()
                     binding.retryButton.hide()
                     binding.progressBar.hide()
                     binding.emptyList.hide()
+                    setUpData(resource.data)
                 }
             }
 
-            setUpData(resource.data)
+
         }
 
         binding.retryButton.setOnClickListener {
@@ -77,9 +78,6 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
     private fun setUpData(userDetail: UserDetailsEntity?) {
         if (userDetail != null) {
             binding.groupViews.show()
-            binding.retryButton.hide()
-            binding.progressBar.hide()
-            binding.emptyList.hide()
 
             Glide.with(requireContext())
                 .load(userDetail.avatarUrl)
@@ -181,6 +179,8 @@ class UserDetailsFragment : Fragment(R.layout.fragment_user_details) {
             } else {
                 binding.tvRepos.hide()
             }
+        }else{
+            binding.emptyList.show()
         }
     }
 
