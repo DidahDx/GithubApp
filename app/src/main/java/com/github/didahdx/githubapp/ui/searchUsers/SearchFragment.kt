@@ -125,6 +125,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             searchView.setQuery(pendingQuery, false)
         }
         searchView.onQueryTextSubmit { query ->
+            binding.rvUsers.scrollToPosition(0)
             viewModel.searchUser(query)
             searchView.clearFocus()
         }

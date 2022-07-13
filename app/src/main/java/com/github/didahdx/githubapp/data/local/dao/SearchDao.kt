@@ -13,8 +13,8 @@ interface SearchDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(users: List<SearchUserEntity>)
 
-    @Query("SELECT * FROM SearchUserEntity ORDER by idLocal ASC")
-    fun getUsersByQuery(): PagingSource<Int, SearchUserEntity>
+    @Query("SELECT * FROM SearchUserEntity  WHERE login LIKE  '%' || :user || '%' ORDER by idLocal ASC")
+    fun getUsersByQuery(user: String): PagingSource<Int, SearchUserEntity>
 
     @Query("DELETE  FROM SearchUserEntity")
     suspend fun clearUsers()

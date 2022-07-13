@@ -18,12 +18,12 @@ class SearchUsersAdapter constructor(
     inner class SearchUsersViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.root.setOnClickListener {
-                val position = absoluteAdapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    getItem(position)?.let { user -> onItemClickListener.userClicked(user) }
-                }
-            }
+//            binding.root.setOnClickListener {
+//                val position = absoluteAdapterPosition
+//                if (position != RecyclerView.NO_POSITION) {
+//                    getItem(position)?.let { user -> onItemClickListener.userClicked(user) }
+//                }
+//            }
         }
 
         fun bind(user: SearchUserEntity) {
@@ -31,6 +31,9 @@ class SearchUsersAdapter constructor(
                 .load(user.avatarUrl)
                 .centerCrop()
                 .into(binding.profileImage)
+            binding.root.setOnClickListener {
+                onItemClickListener.userClicked(user)
+            }
 
             binding.tvName.text = user.login
         }

@@ -15,25 +15,17 @@ class UserAdapter constructor(
 
     inner class FollowsViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.root.setOnClickListener {
-                val position = absoluteAdapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    getItem(position)?.let { follows ->
-                        onItemClickListener.userClicked(
-                            follows
-                        )
-                    }
-                }
-            }
-        }
 
         fun bind(follows: User) {
             Glide.with(binding.root.context)
                 .load(follows.avatarUrl)
                 .centerCrop()
                 .into(binding.profileImage)
-
+            binding.root.setOnClickListener {
+                onItemClickListener.userClicked(
+                    follows
+                )
+            }
             binding.tvName.text = follows.login
         }
     }

@@ -21,21 +21,14 @@ class RepoAdapter(
 
     inner class RepoViewHolder(private val binding: ItemGithubRepositoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
-        init {
-            binding.root.setOnClickListener {
-                val position = absoluteAdapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    getItem(position)?.let { repositoryDto ->
-                        onItemClickListener.onClick(
-                            repositoryDto
-                        )
-                    }
-                }
-            }
-        }
+        
 
         fun bind(repositoryDto: RepositoryEntity) {
+            binding.root.setOnClickListener {
+                onItemClickListener.onClick(
+                    repositoryDto
+                )
+            }
             binding.tvArchived.setVisibility(repositoryDto.archived)
             binding.tvName.displayDataIfNotNull(repositoryDto.name, null)
             binding.tvDefaultBranch.displayDataIfNotNull(repositoryDto.defaultBranch, null)
